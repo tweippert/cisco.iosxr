@@ -34,6 +34,9 @@ from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.bg
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.bgp_neighbor_address_family.bgp_neighbor_address_family import (
     Bgp_neighbor_address_familyFacts,
 )
+from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.bgp_templates.bgp_templates import (
+    Bgp_templatesFacts,
+)
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.hostname.hostname import (
     HostnameFacts,
 )
@@ -85,11 +88,20 @@ from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.os
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.prefix_lists.prefix_lists import (
     Prefix_listsFacts,
 )
+from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.route_maps.route_maps import (
+    Route_mapsFacts,
+)
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.snmp_server.snmp_server import (
     Snmp_serverFacts,
 )
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.static_routes.static_routes import (
     Static_routesFacts,
+)
+from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.vrf_address_family.vrf_address_family import (
+    Vrf_address_familyFacts,
+)
+from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.vrf_global.vrf_global import (
+    Vrf_globalFacts,
 )
 
 
@@ -122,6 +134,10 @@ FACT_RESOURCE_SUBSETS = dict(
     ntp_global=Ntp_globalFacts,
     snmp_server=Snmp_serverFacts,
     hostname=HostnameFacts,
+    bgp_templates=Bgp_templatesFacts,
+    vrf_address_family=Vrf_address_familyFacts,
+    vrf_global=Vrf_globalFacts,
+    route_maps=Route_mapsFacts,
 )
 
 

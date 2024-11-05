@@ -22,8 +22,9 @@ from __future__ import absolute_import, division, print_function
 
 __metaclass__ = type
 
+from unittest.mock import patch
+
 from ansible_collections.cisco.iosxr.plugins.modules import iosxr_lldp_global
-from ansible_collections.cisco.iosxr.tests.unit.compat.mock import patch
 from ansible_collections.cisco.iosxr.tests.unit.modules.utils import set_module_args
 
 from .iosxr_module import TestIosxrModule, load_fixture
@@ -204,3 +205,27 @@ class TestIosxrLldpModule(TestIosxrModule):
             "tlv_select": {"system_description": False},
         }
         self.assertEqual(parsed_list, result["parsed"])
+
+    def test_iosxr_lldp_global_overridden(self):
+        self._prepare()
+        set_module_args(
+            dict(
+                config=dict(
+                    holdtime=100,
+                    tlv_select=dict(
+                        management_address=False,
+                        system_description=False,
+                        port_description=False,
+                    ),
+                ),
+                state="overridden",
+            ),
+        )
+        commands = [
+            "no lldp reinit 2",
+            "no lldp subinterfaces enable",
+            "no lldp timer 3000",
+            "lldp tlv-select port-description disable",
+        ]
+        result = self.execute_module(changed=True)
+        self.assertEqual(sorted(result["commands"]), sorted(commands))

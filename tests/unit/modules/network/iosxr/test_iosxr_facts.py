@@ -23,8 +23,9 @@ __metaclass__ = type
 
 import json
 
+from unittest.mock import patch
+
 from ansible_collections.cisco.iosxr.plugins.modules import iosxr_facts
-from ansible_collections.cisco.iosxr.tests.unit.compat.mock import patch
 from ansible_collections.cisco.iosxr.tests.unit.modules.utils import set_module_args
 
 from .iosxr_module import TestIosxrModule, load_fixture
@@ -117,3 +118,33 @@ class TestIosxrFacts(TestIosxrModule):
         self.assertIn("config", ansible_facts["ansible_net_gather_subset"])
         self.assertEqual("iosxr01", ansible_facts["ansible_net_hostname"])
         self.assertIn("ansible_net_config", ansible_facts)
+
+    def test_iosxr_facts_cpu_utilization(self):
+        set_module_args({"gather_subset": "hardware"})
+        result = self.execute_module()
+        ansible_facts = result["ansible_facts"]
+        cpu_utilization_data = {
+            "one_minute": 21,
+            "five_minutes": 13,
+            "fifteen_minutes": 8,
+        }
+        self.assertEqual(
+            ansible_facts["ansible_net_cpu_utilization"],
+            cpu_utilization_data,
+        )
+
+    def test_iosxr_facts_neighbors(self):
+        set_module_args(dict(gather_subset="interfaces"))
+        result = self.execute_module()
+        ansible_facts = result["ansible_facts"]["ansible_net_neighbors"]
+        expected_neighbors = {
+            "Ethernet0/1": [
+                {
+                    "host": "device2.cisco.com",
+                    "platform": "cisco 4500",
+                    "port": "Ethernet0",
+                    "ip": "171.68.162.134",
+                },
+            ],
+        }
+        self.assertCountEqual(ansible_facts.keys(), expected_neighbors.keys())

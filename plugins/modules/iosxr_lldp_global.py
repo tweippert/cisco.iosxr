@@ -108,6 +108,7 @@ options:
     - parsed
     - gathered
     - rendered
+    - overridden
     default: merged
 
 """
@@ -425,9 +426,6 @@ EXAMPLES = """
 #        "lldp tlv-select management-address disable",
 #        "lldp timer 3000"
 #  ]
-
-
-
 """
 RETURN = """
 before:

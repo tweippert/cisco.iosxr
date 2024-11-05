@@ -397,7 +397,7 @@ class Acls(ConfigBase):
 
             return cmd
 
-        def _compute_protocol_options(protocol_dict):
+        def _compute_protocol_options(protocol_options):
             cmd = ""
             for value in protocol_options.values():
                 for subkey, subvalue in iteritems(value):
@@ -502,7 +502,8 @@ class Acls(ConfigBase):
                 ) ^ set(flatten_dict(want_ace.get("protocol_options", {})))
 
             if delta or protocol_opt_delta:
-                want_ace = self._dict_merge(have_ace, want_ace)
+                if self.state not in ["replaced"]:
+                    want_ace = self._dict_merge(have_ace, want_ace)
                 return self._compute_commands(want_ace)
 
     def _prepare_for_diff(self, ace):

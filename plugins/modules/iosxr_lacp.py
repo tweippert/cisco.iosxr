@@ -87,6 +87,7 @@ options:
     - parsed
     - rendered
     - gathered
+    - overridden
     default: merged
 """
 EXAMPLES = """
@@ -328,8 +329,6 @@ EXAMPLES = """
 # RP/0/0/CPU0:an-iosxr-02#show running-config lacp
 # lacp system mac 00c1.4c00.bd15
 # lacp system priority
-
-
 """
 RETURN = """
 before:

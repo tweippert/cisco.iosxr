@@ -22,8 +22,9 @@ from __future__ import absolute_import, division, print_function
 
 __metaclass__ = type
 
+from unittest.mock import patch
+
 from ansible_collections.cisco.iosxr.plugins.modules import iosxr_acl_interfaces
-from ansible_collections.cisco.iosxr.tests.unit.compat.mock import patch
 from ansible_collections.cisco.iosxr.tests.unit.modules.utils import set_module_args
 
 from .iosxr_module import TestIosxrModule, load_fixture
@@ -248,7 +249,6 @@ class TestIosxrAclInterfacesModule(TestIosxrModule):
             ),
         )
         result = self.execute_module(changed=False)
-        print(result["parsed"])
         parsed_list = [
             {
                 "name": "GigabitEthernet0/0/0/0",

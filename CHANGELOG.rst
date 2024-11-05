@@ -4,6 +4,217 @@ Cisco Iosxr Collection Release Notes
 
 .. contents:: Topics
 
+v10.2.2
+=======
+
+Bugfixes
+--------
+
+- iosxr_acls_facts - Fix incorrect rendering of some acl facts causing errors.
+
+v10.2.1
+=======
+
+Bugfixes
+--------
+
+- iosxr_static_routes - Fix incorrect handling of the vrf keyword between the destination address and next-hop interface in both global and VRF contexts for IPv4 and IPv6 static_route configurations.
+
+v10.2.0
+=======
+
+Minor Changes
+-------------
+
+- Added iosxr_route_maps resource module, that helps with configuration of route-policy.
+
+Documentation Changes
+---------------------
+
+- Includes a new support related section in the README.
+
+New Modules
+-----------
+
+- iosxr_route_maps - Resource module to configure route maps.
+
+v10.1.0
+=======
+
+Minor Changes
+-------------
+
+- Adds a new module `iosxr_vrf_address_family` to manage VRFs address families on Cisco IOS-XR devices (https://github.com/ansible-collections/cisco.iosxr/pull/489).
+
+v10.0.0
+=======
+
+Release Summary
+---------------
+
+Starting from this release, the minimum `ansible-core` version this collection requires is `2.15.0`. The last known version compatible with ansible-core<2.15 is `v9.0.0`. A new resource module `iosxr_vrf_global` is added to manage VRF global configurations.
+
+Major Changes
+-------------
+
+- Bumping `requires_ansible` to `>=2.15.0`, since previous ansible-core versions are EoL now.
+
+Minor Changes
+-------------
+
+- Adds a new module `iosxr_vrf_global` to manage VRF global configurations on Cisco IOS-XR devices (https://github.com/ansible-collections/cisco.iosxr/pull/467).
+
+v9.0.0
+======
+
+Major Changes
+-------------
+
+- Update the netcommon base version to support cli_restore plugin.
+
+Minor Changes
+-------------
+
+- Add support for cli_restore functionality.
+- Please refer the PR to know more about core changes (https://github.com/ansible-collections/ansible.netcommon/pull/618).
+- cli_restore module is part of netcommon.
+
+v8.0.0
+======
+
+Major Changes
+-------------
+
+- This release removes previously deprecated module and attributes from this collection. Please refer to the **Removed Features** section for details.
+
+Removed Features (previously deprecated)
+----------------------------------------
+
+- Remove deprecated iosxr_logging module which is replaced with iosxr_logging_global resource module.
+
+v7.2.0
+======
+
+Minor Changes
+-------------
+
+- Add missing options in afi and safi in address-family of bgp_templates RM.
+
+Bugfixes
+--------
+
+- Fix 'afi' value in bgp_templates RM to valid values.
+
+v7.1.0
+======
+
+Minor Changes
+-------------
+
+- iosxr_facts - Add cdp neighbors in ansible_net_neighbors dictionary (https://github.com/ansible-collections/cisco.iosxr/pull/457).
+
+v7.0.0
+======
+
+Release Summary
+---------------
+
+Starting from this release, the minimum `ansible-core` version this collection requires is `2.14.0`. The last known version compatible with ansible-core<2.14 is `v6.1.1`.
+
+Major Changes
+-------------
+
+- Bumping `requires_ansible` to `>=2.14.0`, since previous ansible-core versions are EoL now.
+
+v6.1.1
+======
+
+Bugfixes
+--------
+
+- Fix issue in gathered state of interfaces and l3_interfaces RMs(https://github.com/ansible-collections/cisco.iosxr/issues/452, https://github.com/ansible-collections/cisco.iosxr/issues/451)
+
+v6.1.0
+======
+
+Minor Changes
+-------------
+
+- iosxr_config - Relax restrictions on I(src) parameter so it can be used more like I(lines). (https://github.com/ansible-collections/cisco.iosxr/issues/343).
+- iosxr_config Add updates option in return value(https://github.com/ansible-collections/cisco.iosxr/issues/438).
+
+Documentation Changes
+---------------------
+
+- Fix docs for prefix_lists RM.
+- iosxr_acls - update examples and use YAML output in them for better readibility.
+
+v6.0.1
+======
+
+Bugfixes
+--------
+
+- Fix issue in deletion of ospf.(https://github.com/ansible-collections/cisco.iosxr/issues/425)
+- Fix issue in facts gathering for Interfaces RM.(https://github.com/ansible-collections/cisco.iosxr/issues/417)
+- Fix issue in lacp and lldp_global of local variable commands.
+- Support overridden state in bgp_global,lacp and lldp_global module.(https://github.com/ansible-collections/cisco.iosxr/issues/386)
+
+Documentation Changes
+---------------------
+
+- Fix grpc sub plugin documentation.
+- Update ospf_interfaces examples
+- Update ospfv2 examples
+- Update ospfv3 examples
+
+v6.0.0
+======
+
+Minor Changes
+-------------
+
+- Add iosxr_bgp_templates module (https://github.com/ansible-collections/cisco.iosxr/issues/341).
+- iosxr_facts - Add CPU utilization.
+- iosxr_l2_interfaces - fix issue in supporting multiple iosxr version. (https://github.com/ansible-collections/cisco.iosxr/issues/379).
+
+Deprecated Features
+-------------------
+
+- Deprecated iosxr_bgp module in favor of iosxr_bgp_global,iosxr_bgp_neighbor_address_family and iosxr_bgp_address_family.
+- iosxr_l2_interfaces - deprecate q_vlan with qvlan which allows vlans in str format e.g "any"
+
+Bugfixes
+--------
+
+- Add support to delete specific static route entry.(https://github.com/ansible-collections/cisco.iosxr/issues/375)
+- l2_interfaces Fix issue in qvlan parsing.(https://github.com/ansible-collections/cisco.iosxr/issues/403)
+
+Documentation Changes
+---------------------
+
+- iosxr_facts - Add ansible_net_cpu_utilization.
+
+New Modules
+-----------
+
+- iosxr_bgp_templates - Manages BGP templates resource module.
+
+v5.0.3
+======
+
+Bugfixes
+--------
+
+- Fixing Bundle-Ether/-POS recognition for resource modules. (https://github.com/ansible-collections/cisco.iosxr/issues/369)
+- acls - Fix issue in ``replaced`` state of not replacing ace entries with remark action. (https://github.com/ansible-collections/cisco.iosxr/issues/332)
+- l3_interfaces - Fix issue in ``gather`` state of not gathering management interface. (https://github.com/ansible-collections/cisco.iosxr/issues/381)
+
+Documentation Changes
+---------------------
+
+- iosxr_interfaces - Fixed module documentation and examples.
+- iosxr_l3_interfaces - Fixed module documentation and examples.
 
 v5.0.2
 ======
@@ -233,7 +444,7 @@ Minor Changes
 New Modules
 -----------
 
-- iosxr_hostname - Manages hostname resource module
+- iosxr_hostname - Resource module to configure hostname.
 
 v2.6.0
 ======
@@ -258,7 +469,7 @@ Documentation Changes
 New Modules
 -----------
 
-- iosxr_snmp_server - Manages snmp-server resource module
+- iosxr_snmp_server - Resource module to configure snmp server.
 
 v2.5.0
 ======
@@ -294,7 +505,7 @@ Bugfixes
 New Modules
 -----------
 
-- iosxr_logging_global - Manages logging attributes of Cisco IOSXR network devices
+- iosxr_logging_global - Resource module to configure logging.
 
 v2.3.0
 ======
@@ -316,7 +527,7 @@ Bugfixes
 New Modules
 -----------
 
-- iosxr_prefix_lists - Prefix-Lists resource module.
+- iosxr_prefix_lists - Resource module to configure prefix lists.
 
 v2.2.0
 ======
@@ -402,9 +613,9 @@ Bugfixes
 New Modules
 -----------
 
-- iosxr_bgp_address_family - Manages BGP Address Family resource module.
-- iosxr_bgp_global - Manages BGP global resource module.
-- iosxr_bgp_neighbor_address_family - Manages BGP neighbor address family resource module.
+- iosxr_bgp_address_family - Resource module to configure BGP Address family.
+- iosxr_bgp_global - Resource module to configure BGP.
+- iosxr_bgp_neighbor_address_family - Resource module to configure BGP Neighbor Address family.
 
 v1.2.1
 ======
@@ -432,7 +643,7 @@ Bugfixes
 New Modules
 -----------
 
-- iosxr_ospf_interfaces - OSPF Interfaces Resource Module.
+- iosxr_ospf_interfaces - Resource module to configure OSPF interfaces.
 
 v1.1.0
 ======
@@ -446,7 +657,7 @@ Minor Changes
 New Modules
 -----------
 
-- iosxr_ospfv3 - ospfv3 resource module
+- iosxr_ospfv3 - Resource module to configure OSPFv3.
 
 v1.0.5
 ======
@@ -510,25 +721,22 @@ Netconf
 New Modules
 -----------
 
-- iosxr_acl_interfaces - ACL interfaces resource module
-- iosxr_acls - ACLs resource module
-- iosxr_banner - Manage multiline banners on Cisco IOS XR devices
-- iosxr_bgp - Configure global BGP protocol settings on Cisco IOS-XR
-- iosxr_command - Run commands on remote devices running Cisco IOS XR
-- iosxr_config - Manage Cisco IOS XR configuration sections
-- iosxr_facts - Get facts about iosxr devices.
-- iosxr_interface - (deprecated, removed after 2022-06-01) Manage Interface on Cisco IOS XR network devices
-- iosxr_interfaces - Interfaces resource module
-- iosxr_l2_interfaces - L2 interfaces resource module
-- iosxr_l3_interfaces - L3 interfaces resource module
-- iosxr_lacp - LACP resource module
-- iosxr_lacp_interfaces - LACP interfaces resource module
-- iosxr_lag_interfaces - LAG interfaces resource module
-- iosxr_lldp_global - LLDP resource module
-- iosxr_lldp_interfaces - LLDP interfaces resource module
-- iosxr_logging - Configuration management of system logging services on network devices
+- iosxr_acl_interfaces - Resource module to configure ACL interfaces.
+- iosxr_acls - Resource module to configure ACLs.
+- iosxr_banner - Module to configure multiline banners.
+- iosxr_command - Module to run commands on remote devices.
+- iosxr_config - Module to manage configuration sections.
+- iosxr_facts - Module to collect facts from remote devices.
+- iosxr_interfaces - Resource module to configure interfaces.
+- iosxr_l2_interfaces - Resource Module to configure L2 interfaces.
+- iosxr_l3_interfaces - Resource module to configure L3 interfaces.
+- iosxr_lacp - Resource module to configure LACP.
+- iosxr_lacp_interfaces - Resource module to configure LACP interfaces.
+- iosxr_lag_interfaces - Resource module to configure LAG interfaces.
+- iosxr_lldp_global - Resource module to configure LLDP.
+- iosxr_lldp_interfaces - Resource module to configure LLDP interfaces.
 - iosxr_netconf - Configures NetConf sub-system service on Cisco IOS-XR devices
-- iosxr_ospfv2 - OSPFv2 resource module
-- iosxr_static_routes - Static routes resource module
-- iosxr_system - Manage the system attributes on Cisco IOS XR devices
-- iosxr_user - Manage the aggregate of local users on Cisco IOS XR device
+- iosxr_ospfv2 - Resource module to configure OSPFv2.
+- iosxr_static_routes - Resource module to configure static routes.
+- iosxr_system - Module to manage the system attributes.
+- iosxr_user - Module to manage the aggregates of local users.

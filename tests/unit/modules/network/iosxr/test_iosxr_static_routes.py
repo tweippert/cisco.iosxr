@@ -8,8 +8,9 @@ from __future__ import absolute_import, division, print_function
 
 __metaclass__ = type
 
+from unittest.mock import patch
+
 from ansible_collections.cisco.iosxr.plugins.modules import iosxr_static_routes
-from ansible_collections.cisco.iosxr.tests.unit.compat.mock import patch
 from ansible_collections.cisco.iosxr.tests.unit.modules.utils import set_module_args
 
 from .iosxr_module import TestIosxrModule, load_fixture
@@ -93,6 +94,142 @@ class TestIosxrStaticRoutesModule(TestIosxrModule):
             "vrf dev_site",
             "address-family ipv6 unicast",
             "1200:10::/64 GigabitEthernet0/0/0/1 55",
+        ]
+        self.execute_module(changed=True, commands=commands)
+
+    def test_iosxr_static_routes_merged_ipv4_global(self):
+        set_module_args(
+            dict(
+                config=[
+                    dict(
+                        address_families=[
+                            dict(
+                                afi="ipv4",
+                                safi="multicast",
+                                routes=[
+                                    dict(
+                                        dest="192.165.17.0/24",
+                                        next_hops=[
+                                            dict(
+                                                interface="GigabitEthernet0/0/0/0",
+                                            ),
+                                        ],
+                                    ),
+                                ],
+                            ),
+                        ],
+                    ),
+                ],
+                state="merged",
+            ),
+        )
+        commands = [
+            "router static",
+            "address-family ipv4 multicast",
+            "192.165.17.0/24 GigabitEthernet0/0/0/0",
+        ]
+        self.execute_module(changed=True, commands=commands)
+
+    def test_iosxr_static_routes_merged_ipv6_global(self):
+        set_module_args(
+            dict(
+                config=[
+                    dict(
+                        address_families=[
+                            dict(
+                                afi="ipv6",
+                                safi="unicast",
+                                routes=[
+                                    dict(
+                                        dest="2001:db6::/64",
+                                        next_hops=[
+                                            dict(
+                                                interface="GigabitEthernet0/0/0/2",
+                                            ),
+                                        ],
+                                    ),
+                                ],
+                            ),
+                        ],
+                    ),
+                ],
+                state="merged",
+            ),
+        )
+        commands = [
+            "router static",
+            "address-family ipv6 unicast",
+            "2001:db6::/64 GigabitEthernet0/0/0/2",
+        ]
+        self.execute_module(changed=True, commands=commands)
+
+    def test_iosxr_static_routes_merged_vrf_ipv4(self):
+        set_module_args(
+            dict(
+                config=[
+                    dict(
+                        vrf="TEST_VRF",
+                        address_families=[
+                            dict(
+                                afi="ipv4",
+                                safi="unicast",
+                                routes=[
+                                    dict(
+                                        dest="192.1.0.0/24",
+                                        next_hops=[
+                                            dict(
+                                                interface="GigabitEthernet0/0/0/1",
+                                            ),
+                                        ],
+                                    ),
+                                ],
+                            ),
+                        ],
+                    ),
+                ],
+                state="merged",
+            ),
+        )
+        commands = [
+            "router static",
+            "vrf TEST_VRF",
+            "address-family ipv4 unicast",
+            "192.1.0.0/24 GigabitEthernet0/0/0/1",
+        ]
+        self.execute_module(changed=True, commands=commands)
+
+    def test_iosxr_static_routes_merged_vrf_ipv6(self):
+        set_module_args(
+            dict(
+                config=[
+                    dict(
+                        vrf="TEST_VRF",
+                        address_families=[
+                            dict(
+                                afi="ipv6",
+                                safi="unicast",
+                                routes=[
+                                    dict(
+                                        dest="2002:db5::/64",
+                                        next_hops=[
+                                            dict(
+                                                interface="GigabitEthernet0/0/0/2",
+                                            ),
+                                        ],
+                                    ),
+                                ],
+                            ),
+                        ],
+                    ),
+                ],
+                state="merged",
+            ),
+        )
+        commands = [
+            "router static",
+            "vrf TEST_VRF",
+            "address-family ipv6 unicast",
+            "2002:db5::/64 GigabitEthernet0/0/0/2",
         ]
         self.execute_module(changed=True, commands=commands)
 
@@ -298,8 +435,7 @@ class TestIosxrStaticRoutesModule(TestIosxrModule):
         )
         commands = [
             "router static",
-            "no address-family ipv4 unicast",
-            "no address-family ipv6 unicast",
+            "no vrf TEST_VRF",
             "no vrf DEV_SITE",
             "vrf DEV_SITE_NEW",
             "address-family ipv4 unicast",
@@ -378,3 +514,37 @@ class TestIosxrStaticRoutesModule(TestIosxrModule):
             },
         ]
         self.assertEqual(parsed_list, result["parsed"])
+
+    def test_iosxr_static_routes_delete_specific_static_route(self):
+        set_module_args(
+            dict(
+                config=[
+                    dict(
+                        address_families=[
+                            dict(
+                                afi="ipv6",
+                                safi="unicast",
+                                routes=[
+                                    dict(
+                                        dest="2001:db8:1000::/36",
+                                        next_hops=[
+                                            dict(
+                                                interface="FastEthernet0/0/0/7",
+                                                description="DC",
+                                            ),
+                                        ],
+                                    ),
+                                ],
+                            ),
+                        ],
+                    ),
+                ],
+                state="deleted",
+            ),
+        )
+        commands = [
+            "router static",
+            "address-family ipv6 unicast",
+            "no 2001:db8:1000::/36 FastEthernet0/0/0/7",
+        ]
+        self.execute_module(changed=True, commands=commands)

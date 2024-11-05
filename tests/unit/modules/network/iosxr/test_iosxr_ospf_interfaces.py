@@ -8,8 +8,9 @@ from __future__ import absolute_import, division, print_function
 
 __metaclass__ = type
 
+from unittest.mock import patch
+
 from ansible_collections.cisco.iosxr.plugins.modules import iosxr_ospf_interfaces
-from ansible_collections.cisco.iosxr.tests.unit.compat.mock import patch
 from ansible_collections.cisco.iosxr.tests.unit.modules.utils import set_module_args
 
 from .iosxr_module import TestIosxrModule, load_fixture
@@ -43,11 +44,6 @@ class TestIosxrOspf_InterfacesModule(TestIosxrModule):
         )
         self.get_resource_connection_facts = self.mock_get_resource_connection_facts.start()
 
-        self.mock_edit_config = patch(
-            "ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.providers.providers.CliProvider.edit_config",
-        )
-        self.edit_config = self.mock_edit_config.start()
-
         self.mock_execute_show_command = patch(
             "ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.ospf_interfaces.ospf_interfaces."
             "Ospf_interfacesFacts.get_ospf_interfaces",
@@ -58,7 +54,6 @@ class TestIosxrOspf_InterfacesModule(TestIosxrModule):
         super(TestIosxrOspf_InterfacesModule, self).tearDown()
         self.mock_get_resource_connection_config.stop()
         self.mock_get_resource_connection_facts.stop()
-        self.mock_edit_config.stop()
         self.mock_get_config.stop()
         self.mock_load_config.stop()
         self.mock_execute_show_command.stop()

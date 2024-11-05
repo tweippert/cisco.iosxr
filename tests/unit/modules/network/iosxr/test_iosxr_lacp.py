@@ -22,8 +22,9 @@ from __future__ import absolute_import, division, print_function
 
 __metaclass__ = type
 
+from unittest.mock import patch
+
 from ansible_collections.cisco.iosxr.plugins.modules import iosxr_lacp
-from ansible_collections.cisco.iosxr.tests.unit.compat.mock import patch
 from ansible_collections.cisco.iosxr.tests.unit.modules.utils import set_module_args
 
 from .iosxr_module import TestIosxrModule, load_fixture
@@ -91,3 +92,87 @@ class TestIosxrLacpModule(TestIosxrModule):
         ]
         result = self.execute_module(changed=True)
         self.assertEqual(sorted(result["commands"]), sorted(commands))
+
+    def test_iosxr_lacp_merged_idempotent(self):
+        self._prepare()
+        set_module_args(
+            dict(
+                config=dict(
+                    system=dict(
+                        priority=12,
+                        mac=dict(address="00c1.4c00.bd15"),
+                    ),
+                ),
+                state="merged",
+            ),
+        )
+        self.execute_module(changed=False, commands=[])
+
+    def test_iosxr_lacp_replaced(self):
+        self._prepare()
+        set_module_args(
+            dict(
+                config=dict(
+                    system=dict(
+                        priority=11,
+                        mac=dict(address="00c1.4c00.bd12"),
+                    ),
+                ),
+                state="replaced",
+            ),
+        )
+        commands = [
+            "lacp system mac 00c1.4c00.bd12",
+            "lacp system priority 11",
+        ]
+        result = self.execute_module(changed=True)
+        self.assertEqual(sorted(result["commands"]), sorted(commands))
+
+    def test_iosxr_lacp_overridden(self):
+        self._prepare()
+        set_module_args(
+            dict(
+                config=dict(
+                    system=dict(
+                        priority=11,
+                        mac=dict(address="00c1.4c00.bd12"),
+                    ),
+                ),
+                state="overridden",
+            ),
+        )
+        commands = [
+            "lacp system mac 00c1.4c00.bd12",
+            "lacp system priority 11",
+        ]
+        result = self.execute_module(changed=True)
+        self.assertEqual(sorted(result["commands"]), sorted(commands))
+
+    def test_iosxr_lacp_deleted(self):
+        self._prepare()
+        set_module_args(dict(state="deleted"))
+        commands = [
+            "no lacp system mac",
+            "no lacp system priority",
+        ]
+        result = self.execute_module(changed=True)
+        self.assertEqual(sorted(result["commands"]), sorted(commands))
+
+    def test_iosxr_lacp_rendered(self):
+        set_module_args(
+            dict(
+                config=dict(
+                    system=dict(
+                        priority=11,
+                        mac=dict(address="00c1.4c00.bd12"),
+                    ),
+                ),
+                state="rendered",
+            ),
+        )
+        commands = [
+            "lacp system mac 00c1.4c00.bd12",
+            "lacp system priority 11",
+        ]
+        result = self.execute_module(changed=False)
+        self.assertEqual(sorted(result["rendered"]), sorted(commands))
